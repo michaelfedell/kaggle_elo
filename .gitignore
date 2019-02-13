@@ -116,3 +116,6 @@ dmypy.json
 
 # Raw data files
 data/*.csv
+
+# VS Code settings
+.vscode/
