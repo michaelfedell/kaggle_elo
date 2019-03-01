@@ -330,7 +330,7 @@ for i, m in enumerate(models):
 # In[ ]:
 
 
-sorted(models, key = lambda x: x['score'])[:15]
+sorted(models, key = lambda x: x['score'])[:15]t
 
 
 # In[23]:
