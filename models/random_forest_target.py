@@ -442,7 +442,7 @@ test.columns
 
 # ### Best model has `max_depth=10` and `max_features=15`
 
-# In[16]:
+# In[11]:
 
 
 X = train.drop(columns=['target', 'chump'])
@@ -456,6 +456,18 @@ rfr.fit(X, Y)
 pd.DataFrame(rfr.predict(test), index=test.index, columns='target').head()
 
 
+# In[12]:
+
+
+feature_imp = pd.Series(rfr.feature_importances_,index=X.columns).sort_values(ascending=False)
+sns.barplot(x=feature_imp.head(10), y=feature_imp.index[:10])
+plt.xlabel('Feature Importance Score')
+plt.ylabel('Features')
+plt.title("Visualizing Important Features")
+plt.legend()
+plt.show()
+
+
 # In[18]:
 
 
@@ -467,6 +479,21 @@ predictions.head()
 
 
 predictions.to_csv('../submission.csv')
+
+
+# In[19]:
+
+
+print(
+    np.mean(train[train.target > -20].target), ',',
+    np.std(train[train.target > -20].target)
+)
+
+
+# In[14]:
+
+
+train.columns
 
 
 # In[ ]:
