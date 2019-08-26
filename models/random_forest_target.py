@@ -84,7 +84,7 @@ rfr = RandomForestRegressor(max_depth=5, random_state=0, n_estimators=100)
 rfr.fit(X_train, Y_train)
 
 
-# In[ ]:
+# In[11]:
 
 
 print("Root Mean squared error: %.2f"
@@ -93,27 +93,27 @@ print("Root Mean squared error: %.2f"
 
 # ## What if we bring in our chump-classifier?
 
-# In[ ]:
+# In[12]:
 
 
 train['chump'] = train['target'] < -20
 
 
-# In[ ]:
+# In[13]:
 
 
 chumps = train[train.chump]
 nonchumps = train[~train.chump]
 
 
-# In[ ]:
+# In[14]:
 
 
 tr_chumps, tt_chumps = train_test_split(chumps, test_size=0.3)
 tr_nonchumps, tt_nonchumps = train_test_split(nonchumps, test_size=0.3)
 
 
-# In[ ]:
+# In[15]:
 
 
 tr = pd.concat([tr_chumps, tr_nonchumps])
@@ -122,7 +122,7 @@ print('Training chumps:', sum(tr.chump)/len(tr))
 print('Test chumps:    ', sum(tt.chump)/len(tt))
 
 
-# In[ ]:
+# In[16]:
 
 
 balanced = pd.concat([
@@ -134,13 +134,13 @@ X = balanced.drop(columns=['chump', 'target'])
 Y = balanced['chump']
 
 
-# In[ ]:
+# In[17]:
 
 
 print('Balanced chumps: ', sum(balanced.chump) / len(balanced))
 
 
-# In[ ]:
+# In[18]:
 
 
 clf = RandomForestClassifier(n_estimators=100, max_depth=7)
@@ -149,20 +149,20 @@ clf.fit(X, Y)
 
 # ### Now retrain the regressor on only "non-chumps"
 
-# In[ ]:
+# In[19]:
 
 
 X = tr[~tr.chump].drop(columns=['chump', 'target'])
 Y = tr[~tr.chump]['target']
 
 
-# In[ ]:
+# In[20]:
 
 
 Y.hist()
 
 
-# In[ ]:
+# In[21]:
 
 
 rfr = RandomForestRegressor(max_depth=5, random_state=0, n_estimators=100)
@@ -171,20 +171,20 @@ rfr.fit(X, Y)
 
 # ## Apply trained models to full train set
 
-# In[ ]:
+# In[22]:
 
 
 X = tt.drop(columns=['chump', 'target'])
 Y = tt['target']
 
 
-# In[ ]:
+# In[23]:
 
 
 X['pred_chump'] = clf.predict(X)
 
 
-# In[ ]:
+# In[24]:
 
 
 chumps = pd.DataFrame(X[X.pred_chump])
@@ -192,76 +192,76 @@ nonchumps = pd.DataFrame(X[~X.pred_chump])
 chumps.head()
 
 
-# In[ ]:
+# In[25]:
 
 
 chumps['pred_target'] = -33.219281
 chumps.head()
 
 
-# In[ ]:
+# In[26]:
 
 
 # X.loc[X.pred_chump, 'pred_target'] = -33.219281
 
 
-# In[ ]:
+# In[27]:
 
 
 X.head()
 
 
-# In[ ]:
+# In[28]:
 
 
 nonchumps['pred_target'] = rfr.predict(nonchumps.drop(columns='pred_chump'))
 nonchumps.head()
 
 
-# In[ ]:
+# In[29]:
 
 
 # X.loc[~X.pred_chump, 'pred_target'] = rfr.predict(X[~X.pred_chump].drop(columns=['pred_chump', 'pred_target']))
 
 
-# In[ ]:
+# In[30]:
 
 
 X.head()
 
 
-# In[ ]:
+# In[31]:
 
 
 X = pd.concat([chumps, nonchumps])
 X = X.join(Y)
 
 
-# In[ ]:
+# In[32]:
 
 
 np.sqrt(mean_squared_error(X.target, X.pred_target))
 
 
-# In[ ]:
+# In[33]:
 
 
 len(X[X.pred_chump])
 
 
-# In[ ]:
+# In[34]:
 
 
 sum(X.target < -20)
 
 
-# In[ ]:
+# In[35]:
 
 
 sum(X.pred_chump != (X.target < -20))
 
 
-# In[ ]:
+# In[36]:
 
 
 # Split dataset into tr for training and tt for final test
@@ -330,10 +330,10 @@ for i, m in enumerate(models):
 # In[ ]:
 
 
-sorted(models, key = lambda x: x['score'])[:15]t
+sorted(models, key = lambda x: x['score'])[:15]
 
 
-# In[23]:
+# In[38]:
 
 
 train['chump'] = train['target'] < -20
@@ -373,7 +373,7 @@ predictions = pd.DataFrame(test['pred_target'], index=test.index)
 predictions.head()
 
 
-# In[30]:
+# In[39]:
 
 
 predictions = pd.DataFrame(test['pred_target'], index=test.index)
@@ -381,7 +381,7 @@ predictions.columns = ['target']
 predictions.head()
 
 
-# In[31]:
+# In[40]:
 
 
 predictions.to_csv('../submission_stacked_rf.csv')
@@ -389,7 +389,7 @@ predictions.to_csv('../submission_stacked_rf.csv')
 
 # # Forget the stacked model - tune RFR to full training data
 
-# In[13]:
+# In[ ]:
 
 
 train['chump'] = train['target'] < -20
@@ -428,13 +428,13 @@ for i, m in enumerate(models):
     print(f'== {np.round((i + 1) / len(models) * 100, 2)}% ==\r', end='')
 
 
-# In[14]:
+# In[ ]:
 
 
 sorted(models, key = lambda x: x['score'])[:15]
 
 
-# In[15]:
+# In[ ]:
 
 
 test.columns
@@ -442,7 +442,7 @@ test.columns
 
 # ### Best model has `max_depth=10` and `max_features=15`
 
-# In[11]:
+# In[41]:
 
 
 X = train.drop(columns=['target', 'chump'])
@@ -456,7 +456,7 @@ rfr.fit(X, Y)
 pd.DataFrame(rfr.predict(test), index=test.index, columns='target').head()
 
 
-# In[12]:
+# In[ ]:
 
 
 feature_imp = pd.Series(rfr.feature_importances_,index=X.columns).sort_values(ascending=False)
@@ -468,20 +468,20 @@ plt.legend()
 plt.show()
 
 
-# In[18]:
+# In[ ]:
 
 
 predictions = pd.DataFrame(rfr.predict(test), index=test.index, columns=['target'])
 predictions.head()
 
 
-# In[19]:
+# In[ ]:
 
 
 predictions.to_csv('../submission.csv')
 
 
-# In[19]:
+# In[ ]:
 
 
 print(
@@ -490,7 +490,7 @@ print(
 )
 
 
-# In[14]:
+# In[ ]:
 
 
 train.columns

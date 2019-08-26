@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import pandas as pd
@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from functools import reduce
 
 
-# In[ ]:
+# In[2]:
 
 
 trx = pd.read_csv('../data/historical_transactions.csv')
@@ -26,7 +26,7 @@ train = pd.read_csv('../data/train.csv')
 test = pd.read_csv('../data/test.csv')
 
 
-# In[ ]:
+# In[3]:
 
 
 trx.purchase_date = pd.to_datetime(trx.purchase_date)
@@ -34,7 +34,7 @@ trx.authorized_flag = trx.authorized_flag.apply(lambda x: True if x == 'Y' else 
 trx.city_id = trx.city_id.apply(str)
 
 
-# In[ ]:
+# In[4]:
 
 
 groups = trx.groupby('card_id')
@@ -56,7 +56,7 @@ users['n_declines'] = groups.size() - groups.authorized_flag.sum()
 users['log_n_declines'] = users['n_declines'].apply(lambda x: np.log(x+1))
 
 
-# In[ ]:
+# In[5]:
 
 
 # Create linear regression object
